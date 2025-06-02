@@ -1,26 +1,32 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 const path = require('path');
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const users = {};
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log('Usuário conectado:', socket.id);
 
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg); // envia para todos
+  socket.on('new user', (username) => {
+    users[socket.id] = username;
+    console.log(`${username} entrou no chat.`);
+  });
+
+  socket.on('chat message', (msg) => {
+    const name = users[socket.id] || 'Desconhecido';
+    io.emit('chat message', { name, message: msg });
   });
 
   socket.on('disconnect', () => {
-    console.log('Usuário desconectado:', socket.id);
+    console.log(`${users[socket.id] || 'Usuário'} saiu`);
+    delete users[socket.id];
   });
 });
 
-server.listen(3000, () => {
+http.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');
 });
