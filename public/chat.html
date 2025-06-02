@@ -13,7 +13,19 @@
   
 </head>
 <body>
+
+    <h1>HPro</h1>
+<div id="container">
+
+
   <div id="chatBox"></div>
+  <div class="onlines" id="onlines">
+      <h3>Usuários Online</h3>
+      <ul id="userList"></ul>
+    </div>
+</div>
+<div id="typingStatus" style="font-style: italic; color: gray; margin: 5px 0;"></div>
+
     <form id="messageForm" style="position: relative;">
         <input id="messageInput" autocomplete="off" placeholder="Digite uma mensagem..." />
         <button type="submit">Enviar</button>
@@ -32,64 +44,7 @@
         </div>
     </form>
 
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const username = localStorage.getItem('username');
-    const chatBox = document.getElementById('chatBox');
-    const messageForm = document.getElementById('messageForm');
-    const messageInput = document.getElementById('messageInput');
-
-    const emojiBtn = document.getElementById('emojiBtn');
-    const emojiMenu = document.getElementById('emojiMenu');
-
-    // Alterna exibição do menu de emojis
-    emojiBtn.addEventListener('click', () => {
-        emojiMenu.classList.toggle('hidden');
-    });
-
-    // Insere emoji ao clicar
-    emojiMenu.querySelectorAll('span').forEach((span) => {
-    span.addEventListener('click', () => {
-        messageInput.value += span.textContent;
-        messageInput.focus();
-    });
-    });
-
-    // Fecha o menu se clicar fora
-    document.addEventListener('click', (e) => {
-    if (
-        !emojiMenu.contains(e.target) &&
-        e.target !== emojiBtn &&
-        e.target !== messageInput
-    ) {
-        emojiMenu.classList.add('hidden');
-    }
-    });
-
-
-    // Envia nome para o servidor ao conectar
-    socket.emit('new user', username);
-
-    // Envia mensagem
-    messageForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (messageInput.value.trim()) {
-        socket.emit('chat message', messageInput.value);
-        messageInput.value = '';
-      }
-    });
-
-    // Recebe mensagem
-    socket.on('chat message', ({ name, message }) => {
-    const msg = document.createElement('div');
-    msg.textContent = `${name}: ${message}`;
-    chatBox.appendChild(msg);
-
-    // Scroll automático para a última mensagem
-    chatBox.scrollTop = chatBox.scrollHeight;
-    });
-  </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/src/chat.js"></script>
 </body>
 </html>
