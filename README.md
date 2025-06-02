@@ -32,14 +32,14 @@ Um **chat em tempo real** desenvolvido com **Node.js**, **Express** e **Socket.I
 
 chat-app/
 ├── public/
-│ ├── index.html
-│ └── style.css
-├── server.js
-├── package.json
 
-yaml
-Copiar
-Editar
+│ ├── index.html
+
+│ └── style.css
+
+├── server.js
+
+├── package.json
 
 ---
 
