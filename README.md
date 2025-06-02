@@ -15,8 +15,7 @@ Um **chat em tempo real** desenvolvido com **Node.js**, **Express** e **Socket.I
 
 ## 📷 Preview
 
-![WebChat Preview](https://user-images.githubusercontent.com/your-user/imagem-exemplo.png)
-
+![image](https://github.com/user-attachments/assets/e7f7a204-4f44-49f1-aa88-71a79c62744c)
 
 ---
 
