@@ -1,0 +1,17 @@
+{
+  "name": "webchat-nodejs",
+  "version": "1.0.0",
+  "description": "um chat em tempo real com WebSockets",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
