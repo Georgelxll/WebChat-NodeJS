@@ -47,30 +47,93 @@
 
     // Envia mensagem
     messageForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (messageInput.value.trim()) {
-        socket.emit('chat message', messageInput.value);
-        messageInput.value = '';
-      }
+        e.preventDefault();
+        if (messageInput.value.trim()) {
+            socket.emit('chat message', {
+            name: username,
+            message: messageInput.value,
+            reply: replyToMessage
+            });
+            messageInput.value = '';
+            replyToMessage = null;
+            replyBox.classList.add('hidden');
+        }
     });
 
-    socket.on('chat message', ({ name, message }) => {
-    const msg = document.createElement('div');
-    msg.textContent = `${name}: ${message}`;
-    chatBox.appendChild(msg);
+    let replyToMessage = null;
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+    const replyBox = document.getElementById('replyBox');
+    const replyText = document.getElementById('replyText');
+    const cancelReply = document.getElementById('cancelReply');
 
-    const audio = new Audio('notify.mp3');
-    
-    // Exibe notificação se não for o próprio usuário e a aba estiver em segundo plano
-    if (name !== username && Notification.permission === 'granted' && document.hidden) {
-        new Notification(`${name} diz:`, {
-        body: message,
+    socket.on('chat message', ({ name, message, reply }) => {
+        const msg = document.createElement('div');
+        msg.classList.add('message');
+
+        // Quando clicar na mensagem, ativar a citação
+        msg.addEventListener('click', () => {
+            replyToMessage = { name, message };
+
+            // Limita o texto a 30 caracteres com reticências
+            const preview = message.length > 30 ? message.substring(0, 30) + '...' : message;
+
+            replyText.textContent = `${name}: ${preview}`;
+            replyBox.classList.remove('hidden');
         });
-        audio.play();
+
+        if (reply) {
+            const replyDiv = document.createElement('div');
+            replyDiv.style.fontSize = '0.8em';
+            replyDiv.style.color = 'gray';
+            replyDiv.style.borderLeft = '2px solid #ccc';
+            replyDiv.style.paddingLeft = '5px';
+            replyDiv.style.width = '200px';
+            replyDiv.style.wordWrap = 'break-word';
+            replyDiv.style.whiteSpace = 'pre-wrap';
+            replyDiv.style.backgroundColor = '#f1f1f1';
+            replyDiv.style.borderRadius = '5px';
+            replyDiv.style.marginBottom = '4px';
+
+            // Limita a mensagem a 30 caracteres
+            let preview = reply.message;
+            if (preview.length > 30) {
+            preview = preview.slice(0, 30) + '...';
+            }
+
+            replyDiv.innerHTML = `<strong>${reply.name}:</strong> ${preview}`;
+            msg.appendChild(replyDiv);
+        }
+
+        const msgText = document.createElement('div');
+        msgText.innerHTML = `<strong>${name}:</strong> ${message}`;
+        msgText.style.wordWrap = 'break-word';
+        msgText.style.whiteSpace = 'pre-wrap';
+        msgText.style.maxWidth = '100%';
+        msg.appendChild(msgText);
+
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+
+    messageForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (messageInput.value.trim()) {
+        socket.emit('chat message', {
+        message: messageInput.value,
+        reply: replyToMessage
+        });
+        messageInput.value = '';
+        replyToMessage = null;
+        replyBox.classList.add('hidden');
     }
     });
+
+    cancelReply.addEventListener('click', () => {
+    replyToMessage = null;
+    replyBox.classList.add('hidden');
+    });
+
 
 
     const userList = document.getElementById('userList');
@@ -88,9 +151,9 @@
 
 
   const h1 = document.querySelector('h1');
-  const fullText = 'HPromessas';
-  const middleText = 'HPro';
-  const finalText = 'HPro 😎';
+  const fullText = 'Aga Promessas vazias';
+  const middleText = 'Aga Pro';
+  const finalText = 'Aga Pro 😎';
   let index = 0;
 
   // Etapa 1: Digitar fullText
@@ -148,5 +211,54 @@
     } else {
         const displayNames = currentlyTyping.slice(0, 3).join(', ');
         typingStatus.textContent = `${displayNames} está${currentlyTyping.length > 1 ? 'o' : ''} digitando...`;
+    }
+    });
+
+
+    const pasteCatcher = document.getElementById('pasteCatcher');
+
+    // Quando uma imagem é colada
+    window.addEventListener('paste', (event) => {
+    if (event.clipboardData) {
+        const items = event.clipboardData.items;
+        for (let item of items) {
+        if (item.type.indexOf("image") === 0) {
+            const file = item.getAsFile();
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+            const base64Image = evt.target.result;
+            socket.emit('image', { name: username, image: base64Image });
+            };
+            reader.readAsDataURL(file);
+        }
+        }
+    }
+    });
+
+    // Suporte a arrastar e soltar imagem
+    chatBox.addEventListener('dragover', (e) => e.preventDefault());
+
+    chatBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+        const base64Image = evt.target.result;
+        socket.emit('image', { name: username, image: base64Image });
+        };
+        reader.readAsDataURL(file);
+    }
+    });
+
+    // Exibe imagem no chat
+    socket.on('image', ({ name, image }) => {
+    const msg = document.createElement('div');
+    msg.innerHTML = `<strong>${name}:</strong><br><img src="${image}" style="max-width: 200px; border-radius: 8px;" />`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (name !== username && Notification.permission === 'granted' && document.hidden) {
+        new Notification(`${name} enviou uma imagem`);
     }
     });

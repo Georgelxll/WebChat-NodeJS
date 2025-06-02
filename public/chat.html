@@ -12,6 +12,7 @@
   </style>
   
 </head>
+
 <body>
 
     <h1>HPro</h1>
@@ -27,6 +28,10 @@
 <div id="typingStatus" style="font-style: italic; color: gray; margin: 5px 0;"></div>
 
     <form id="messageForm" style="position: relative;">
+        <div id="replyBox" class="hidden">
+            Respondendo: <span id="replyText"></span>
+            <button type="button" id="cancelReply">❌</button>
+        </div>
         <input id="messageInput" autocomplete="off" placeholder="Digite uma mensagem..." />
         <button type="submit">Enviar</button>
         <button type="button" id="emojiBtn">😄</button>
@@ -46,5 +51,8 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/src/chat.js"></script>
+
+
+<div contenteditable="true" id="pasteCatcher" style="position:absolute;opacity:0;pointer-events:none;"></div>
 </body>
 </html>

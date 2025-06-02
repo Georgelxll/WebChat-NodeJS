@@ -18,9 +18,13 @@ io.on('connection', (socket) => {
     console.log(`${username} entrou no chat.`);
   });
 
-  socket.on('chat message', (msg) => {
+  socket.on('chat message', ({ message, reply }) => {
     const name = users[socket.id] || 'Desconhecido';
-    io.emit('chat message', { name, message: msg });
+    io.emit('chat message', {
+      name,
+      message,
+      reply: reply || null
+    });
   });
 
   socket.on('new user', (username) => {
@@ -51,9 +55,11 @@ io.on('connection', (socket) => {
     io.emit('users typing', Array.from(typingUsers));
   });
 
+  socket.on('image', ({ name, image }) => {
+    io.emit('image', { name, image });
+  });
+
 });
-
-
 
 
 http.listen(3000, () => {

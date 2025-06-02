@@ -147,3 +147,11 @@ h2 {
     background: #dad7d7;
     border-radius: 15px;
 }
+
+#replyBox {
+  background: #3b3b4f;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-left: 3px solid #007bff;
+  font-size: 0.9em;
+}
