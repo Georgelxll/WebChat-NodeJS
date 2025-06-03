@@ -48,7 +48,9 @@ chat-app/
 1. **Clone o repositório**
 
 git clone https://github.com/seu-usuario/WebChat-NodeJS.git
+
 cd WebChat-NodeJS
+
 Instale as dependências
 npm install
 
