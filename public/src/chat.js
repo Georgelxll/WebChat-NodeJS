@@ -143,7 +143,7 @@
     userList.innerHTML = '';
     users.forEach(user => {
         const li = document.createElement('li');
-        li.textContent = user;
+        li.textContent = "🟢" + user;
         userList.appendChild(li);
     });
     });
@@ -151,9 +151,9 @@
 
 
   const h1 = document.querySelector('h1');
-  const fullText = 'Aga Promessas vazias';
-  const middleText = 'Aga Pro';
-  const finalText = 'Aga Pro 😎';
+  const fullText = 'HPro Chat';
+  const middleText = 'HPro Chat';
+  const finalText = 'HPro Chat';
   let index = 0;
 
   // Etapa 1: Digitar fullText
