@@ -71,3 +71,17 @@ Notificações sonoras ou por desktop
 
 📄 Licença
 Este projeto está sob a licença MIT. Sinta-se livre para usar e modificar!
+
+
+- V 0.2
+
+## 📷 Preview
+![image](https://github.com/user-attachments/assets/5e00931d-d258-4fc1-a706-195a4526c056)
+
+
+💡 Melhorias feitas
+- Nome de usuário sendo exibido ao entrar no chat.
+- Notificações sonoras e por desktop.
+- Permitido colar imagens para enviar no chat.
+- Exibindo nome do usuário quando está digitando.
+- Responder mensagem clicando em cima da mesma.
