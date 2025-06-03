@@ -46,7 +46,7 @@ chat-app/
 ## ⚙️ Como executar localmente
 
 1. **Clone o repositório**
-```bash
+
 git clone https://github.com/seu-usuario/WebChat-NodeJS.git
 cd WebChat-NodeJS
 Instale as dependências
@@ -71,7 +71,6 @@ Notificações sonoras ou por desktop
 
 📄 Licença
 Este projeto está sob a licença MIT. Sinta-se livre para usar e modificar!
-
 
 - V 0.2
 
